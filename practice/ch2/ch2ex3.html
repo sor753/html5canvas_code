@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+      let drawScreen = () => {
+        // context.fillStyle = "#aaaaaa";
+        // context.fillRect(0, 0, 200, 200);
+        // context.fillStyle = "#000000";
+        // context.font = '20px _sans';
+        // context.textBaseline = "top";
+        // context.fillText("Canvas!", 0 , 0);
+        // context.fillStyle = "#000000";
+        // context.strokeStyle = "#ff00ff";
+        // context.lineWidth = 2;
+        // context.fillRect(10, 10, 40, 40);
+        // context.strokeRect(0, 0, 60, 60);
+        // context.clearRect(20, 20, 20, 20);
+        // context.strokeStyle = "blacl";
+        // context.lineWidth = 10;
+        // context.lineCap = "square";
+        // context.beginPath();
+        // context.moveTo(20, 10);
+        // context.lineTo(100, 10);
+        // context.stroke();
+        // context.lineJoin = "bevel";
+        // context.lineCap = "round";
+        // context.beginPath();
+        // context.moveTo(0, 0);
+        // context.lineTo(25, 0);
+        // context.lineTo(25, 25);
+        // context.moveTo(10, 50);
+        // context.lineTo(35, 50);
+        // context.lineTo(35, 75);
+        // context.stroke();
+        // context.lineJoin = "round";
+        // context.lineCap = "butt";
+        // context.moveTo(10, 100);
+        // context.lineTo(35, 100);
+        // context.lineTo(35, 125);
+        // context.stroke();
+        context.beginPath();
+        context.strokeStyle = "black";
+        context.lineWidth = 5;
+        context.arc(100, 100, 20, (Math.PI / 180) * 0, (Math.PI / 180) * 360, false);
+        context.moveTo(0, 0);
+        context.lineTo(100, 200);
+        context.arcTo(350, 350, 100, 100, 20);
+        context.stroke();
+      }
+      drawScreen();
+    }
+    </script>
+</body>
+</html>
