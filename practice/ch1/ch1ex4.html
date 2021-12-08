@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div style="position: absolute; top: 50px; left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+    <form>
+      <input type="button" id="createImageData" value="Export Canvas Image">
+    </form>
+  </div>
+
+<script>
+"use strict";
+
+window.addEventListener('load', () => {
+  eventWindowLoaded();
+})
+let eventWindowLoaded = () => {
+  canvasApp();
+}
+let canvasApp = () => {
+  let guesses = 0;
+  let message = "Guess The Letter From a (lower) to z (higher)";
+  let letters = [
+    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
+  ]
+  let today = new Date();
+  let letterToGuess = "", higherOrLower = "", lettersGuessed, gameOver = false;
+  
+  let theCanvas = document.getElementById("canvasOne");
+  let context = theCanvas.getContext("2d");
+  console.log(theCanvas);
+  console.log(context);
+
+  let initGame = () => {
+    let letterIndex = Math.floor(Math.random() * letters.length);
+    console.log(letterIndex);
+    letterToGuess = letters[letterIndex];
+    console.log(letterToGuess);
+    lettersGuessed = [];
+    console.log(lettersGuessed);
+    window.addEventListener("keyup", eventKeyPreaaed, true);
+    let formElement = document.getElementById("createImageData");
+    formElement.addEventListener('click', createImageDataPressed, false);
+    drawScreen();
+  }
+  let eventKeyPreaaed = (e) => {
+    if (!gameOver) {
+      let letterPressed = String.fromCharCode(e.keyCode);
+      letterPressed = letterPressed.toLowerCase();
+      console.log(letterPressed);
+      guesses++;
+      lettersGuessed.push(letterPressed);
+      if (letterPressed == letterToGuess) {
+        gameOver = true;
+      } else {
+        let letterIndex = letters.indexOf(letterToGuess);
+        let guessIndex = letters.indexOf(letterPressed);
+        console.log(guessIndex);
+        if (guessIndex < 0) {
+          higherOrLower = "That is not a letter";
+        } else if (guessIndex > letterIndex) {
+          higherOrLower = "Lower";
+        } else {
+          higherOrLower = "Higher";
+        }
+        console.log(higherOrLower);
+      }
+      drawScreen();
+    }
+  }
+  let drawScreen = () => {
+    //背景
+    context.fillStyle = "#ffffaa";
+    context.fillRect(0, 0, 500, 300);
+    //ボックス
+    context.strokeStyle = "#000000";
+    context.strokeRect(5, 5, 490, 290);
+    context.textBaseline = "top";
+    //日時
+    context.fillStyle = "#000000";
+    context.font ="10px _sans";
+    context.fillText(today, 150, 10);
+    //メッセージ
+    context.fillStyle = "#ff0000";
+    context.font = "14px _sans";
+    context.fillText(message, 125,30);
+    //回数
+    context.fillStyle = "#109910";
+    context.font = "16px _sans";
+    context.fillText('Guesses: ' + guesses, 215, 50);
+    //前か後か
+    context.fillStyle = "#000000";
+    context.font = "16px _sans";
+    context.fillText("Higher Or Lower: " + higherOrLower, 150, 125);
+    //推測済の文字
+    context.fillStyle = "#ff0000";
+    context.font = "16px _sans";
+    context.fillText("Letters Guesses: " + lettersGuessed.toString(), 10, 260);
+    if (gameOver) {
+      context.fillStyle = "#ff0000";
+      context.font = "40px _sans";
+      context.fillText("You Got It!", 150, 180);
+    }
+  }
+  let createImageDataPressed = (e) => {
+    window.open(theCanvas.toDataURL(), "canvasImage", "left=0,top=0,width=" + theCanvas.width + ",height=" + theCanvas.height + ",toolbar=0,resizable=0");
+  }
+
+  initGame();
+}
+</script>
+</body>
+</html>
