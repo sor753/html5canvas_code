@@ -23,8 +23,26 @@
       let theCanvas = document.getElementById("canvasOne")
       let context = theCanvas.getContext("2d");
       let drawScreen = () => {
+        //大きなボックス
+        context.fillStyle = "black";
+        context.fillRect(10, 10, 200, 200);
+        //赤の正方形
+        context.fillStyle = "red";
+        context.fillRect(1, 1, 50, 50);
+        //source-over
+        context.globalCompositeOperation = "source-over";
+        //隣に赤の正方形
+        context.fillRect(60, 1, 50, 50);
+        //destination-over
+        context.globalCompositeOperation = "destination-over";
+        context.fillRect(1, 60, 50, 50);
+        //globalAlphaを設定
+        context.globalAlpha = .5;
+        //source-atop
+        context.globalCompositeOperation = "source-atop";
+        context.fillRect(60, 60, 50, 50);
         context.beginPath();
-        context.strokeStyle = "black";
+        context.strokeStyle = "yellow";
         context.lineWidth = 5;
         context.arc(100, 100, 20, (Math.PI / 180) * 0, (Math.PI / 180) * 360, false);
         context.moveTo(0, 0);

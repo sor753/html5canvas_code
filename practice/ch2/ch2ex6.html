@@ -23,14 +23,15 @@
       let theCanvas = document.getElementById("canvasOne")
       let context = theCanvas.getContext("2d");
       let drawScreen = () => {
-        context.beginPath();
-        context.strokeStyle = "black";
-        context.lineWidth = 5;
-        context.arc(100, 100, 20, (Math.PI / 180) * 0, (Math.PI / 180) * 360, false);
-        context.moveTo(0, 0);
-        context.lineTo(100, 200);
-        context.arcTo(350, 350, 100, 100, 20);
-        context.stroke();
+        context.fillStyle = "black";
+        context.fillRect(20, 20, 25, 25);
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        let angleinRadians = 45 * Math.PI / 180;
+        let x = 100, y = 100, width = 50, height = 50;
+        context.translate(x + .5 * width, y + .5 * height);
+        context.rotate(angleinRadians);
+        context.fillStyle = "red";
+        context.fillRect(-.5 * width, -.5 * height, width, height);
       }
       drawScreen();
     }
