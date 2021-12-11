@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+      let drawScreen = () => {
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        let angleInRadians1 = 45 * Math.PI / 180;
+        let x1 = 50, y1 = 100, width1 = 40, height1 = 40;
+        context.translate(x1 + .5 * width1, y1 + .5 * height1);
+        context.rotate(angleInRadians1);
+        context.fillStyle = "red";
+        context.fillRect(-.5 * width1, -.5 * height1, width1, height1);
+
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        let angleInRadians2 = 75 * Math.PI / 180;
+        let x2 = 100, y2 = 100, width2 = 40, height2 = 40;
+        context.translate(x2 + .5 * width2, y2 + .5 * height2);
+        context.rotate(angleInRadians2);
+        context.fillStyle = "red";
+        context.fillRect(-.5 * width2, -.5 * height2, width2, height2);
+
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        let angleInRadians3 = 90 * Math.PI / 180;
+        let x3 = 150, y3 = 100, width3 = 40, height3 = 40;
+        context.translate(x3 + .5 * width3, y3 + .5 * height3);
+        context.rotate(angleInRadians3);
+        context.fillStyle = "red";
+        context.fillRect(-.5 * width3, -.5 * height3, width3, height3);
+
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        let angleInRadians4 = 120 * Math.PI / 180;
+        let x4 = 200, y4 = 100, width4 = 40, height4 = 40;
+        context.translate(x4 + .5 * width4, y4 + .5 * height4);
+        context.rotate(angleInRadians4);
+        context.fillStyle = "red";
+        context.fillRect(-.5 * width4, -.5 * height4, width4, height4);
+      }
+      drawScreen();
+    }
+  </script>
+</body>
+
+</html>

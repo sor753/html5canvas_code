@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+      let drawScreen = () => {
+        let fillImage = new Image();
+        fillImage.onload = () => {
+          let fillPattern1 = context.createPattern(fillImage, 'no-repeat');
+          let fillPattern2 = context.createPattern(fillImage, 'repeat-x');
+          let fillPattern3 = context.createPattern(fillImage, 'repeat-y');
+
+          context.fillStyle = fillPattern2;
+          context.fillRect(0, 0, 100, 100);
+
+          context.fillStyle = fillPattern1;
+          context.fillRect(0, 110, 100, 100);
+
+          context.fillStyle = fillPattern3;
+          context.fillRect(0, 210, 100, 100);
+        }
+        fillImage.src = 'fill_20x20.gif';
+      }
+      drawScreen();
+    }
+  </script>
+</body>
+
+</html>

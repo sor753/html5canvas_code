@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+      let drawScreen = () => {
+        context.fillStyle = 'red';
+
+        context.shadowOffsetX = 4;
+        context.shadowOffsetY = 4;
+        context.shadowColor = 'black';
+        context.shadowBlur = 4;
+        context.fillRect(10, 10, 100, 100);
+
+        context.shadowOffsetX = -4;
+        context.shadowOffsetY = -4;
+        context.shadowColor = 'black';
+        context.shadowBlur = 4;
+        context.fillRect(150, 10, 100, 100);
+
+        context.shadowOffsetX = 10;
+        context.shadowOffsetY = 10;
+        context.shadowColor = 'rgb(100, 100, 100)';
+        context.shadowBlur = 8;
+        context.arc(200, 220, 100, (Math.PI / 180) * 0, (Math.PI / 180) * 360, false);
+        context.fill();
+      }
+      drawScreen();
+    }
+  </script>
+</body>
+
+</html>
