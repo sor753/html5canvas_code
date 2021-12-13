@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+    <form>
+      Text: <input type="textBox" placeholder="your text">
+      <br>
+    </form>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      console.log('aaa');
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      console.log(theCanvas);
+      let context = theCanvas.getContext("2d");
+      console.log(context);
+
+      let message = "Your text";
+
+      let drawScreen = () => {
+        context.font = "50px serif";
+        context.fillStyle = "#FF0000";
+        context.fillText(message, 100, 80);
+      }
+      drawScreen();
+    }
+  </script>
+</body>
+
+</html>
