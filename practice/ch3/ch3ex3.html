@@ -46,11 +46,15 @@
       Text Color:
       <input type="color" id="textFillcolor" value="FF0000">
       <br>
+      Text Color 2:
+      <input type="color" id="textFillColor2" value="000000">
+      <br>
       Fill Type:
-      <select id="">
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
+      <select id="fillType">
+        <option value="colorFill">Color Fill</option>
+        <option value="linearGradient">Linear Gradient</option>
+        <option value="radialGradient">Radial Gradient</option>
+        <option value="pattern">pattern</option>
       </select>
       <br>
       Fill Or Stroke:
@@ -79,6 +83,33 @@
         <option value="right">right</option>
       </select>
       <br>
+      Alpha:
+      <input type="range" id="textAlpha" min="0.0" max="1.0" step="0.01" value="1.0">
+      <br>
+      Shadow X:
+      <input type="range" id="shadowX" min="-100" max="100" step="1" value="1">
+      <br>
+      Shadow Y:
+      <input type="range" id="shadowY" min="-100" max="100" step="1" value="1">
+      <br>
+      Shadow Blur:
+      <input type="range" id="shadowBlur" min="1" max="100" step="1" value="1">
+      <br>
+      Shadow Color:
+      <input type="color" id="shadowColor" value="707070">
+      <br>
+      Canvas Width: <input type="range" id="canvasWidth" min="0" max="1000" step="1" value="500">
+      <br>
+      Canvas Height: <input type="range" id="canvasHeight" min="0" max="1000" step="1" value="300">
+      <br>
+      Canvas Style Width: <input type="range" id="canvasStyleWidth" min="0" max="1000" step="1" value="500">
+      <br>
+      Canvas Style Height: <input type="range" id="canvasStyleHeight" min="0" max="1000" step="1" value="300">
+      <br>
+      <input type="button" id="createImageData" value="Create Image Data">
+      <br>
+      <br>
+      <textarea id="imageDataDisplay" rows=10 cols=30></textarea>
     </form>
   </div>
   <script>
@@ -98,33 +129,75 @@
       let textFillcolor = "#FF0000";
       let textBaseline = "middle";
       let textAlign = "center";
+      let textAlpha = 1;
+      let shadowX = 1;
+      let shadowY = 1;
+      let shadowBlur = 1;
+      let shadowColor = "#707070";
+      let fillType = "colorFill";
+      let textFillColor2 = "#000000";
+      let pattern = new Image();
 
       let theCanvas = document.getElementById("canvasOne");
       let context = theCanvas.getContext("2d");
 
       let drawScreen = () => {
+        context.globalAlpha = 1;
+        context.shadowColor = "#707070";
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
         context.fillStyle = "#ffffaa";
         context.fillRect(0, 0, theCanvas.width, theCanvas.height);
         context.strokeStyle = "#000000";
         context.strokeRect(5, 5, theCanvas.width - 10, theCanvas.height - 10);
-        context.font = fontWeight + " " + fontStyle + " " + fontSize + "px " + fontFace;
         context.textBaseline = textBaseline;
         context.textAlign = textAlign;
+        context.font = fontWeight + " " + fontStyle + " " + fontSize + "px " + fontFace;
+
+        context.shadowColor = shadowColor;
+        context.shadowOffsetX = shadowX;
+        context.shadowOffsetY = shadowY;
+        context.shadowBlur = shadowBlur;
+
+        context.globalAlpha = textAlpha;
 
         let xPosition = (theCanvas.width / 2);
         let yPosition = (theCanvas.height / 2);
 
+        var metrics = context.measureText(message);
+        var textWidth = metrics.width;
+
+        let tempColor;
+        if (fillType == "colorFill") {
+          tempColor = textFillcolor;
+        } else if (fillType == "linearGradient") {
+          let gradient = context.createLinearGradient(xPosition - textWidth / 2, yPosition, xPosition + textWidth / 2, yPosition);
+          gradient.addColorStop(0, textFillcolor);
+          gradient.addColorStop(.6, textFillColor2);
+          tempColor = gradient;
+        } else if (fillType == "radialGradient") {
+          let gradient = context.createRadialGradient(xPosition, yPosition, fontSize / 2, xPosition, yPosition, textWidth / 2);
+          gradient.addColorStop(0, textFillcolor);
+          gradient.addColorStop(.6, textFillColor2);
+          tempColor = gradient;
+        } else if (fillType == "pattern") {
+          tempColor = context.createPattern(pattern, "repeat");
+        } else {
+          tempColor = textFillcolor;
+        }
+
         switch (fillOrStroke) {
           case "fill":
-            context.fillStyle = textFillcolor;
+            context.fillStyle = tempColor;
             context.fillText(message, xPosition, yPosition);
             break;
           case "stroke":
-            context.strokeStyle = textFillcolor;
+            context.strokeStyle = tempColor;
             context.strokeText(message, xPosition, yPosition);
             break;
           case "both":
-            context.fillStyle = textFillcolor;
+            context.fillStyle = tempColor;
             context.fillText(message, xPosition, yPosition);
             context.strokeStyle = "#000000";
             context.strokeText(message, xPosition, yPosition);
@@ -177,6 +250,63 @@
         textAlign = target.value;
         drawScreen();
       }
+      let textAlphaChanged = (e) => {
+        let target = e.target;
+        textAlpha = target.value;
+        drawScreen();
+      }
+      let shadowXChanged = (e) => {
+        let target = e.target;
+        shadowX = target.value;
+        drawScreen();
+      }
+      let shadowYChanged = (e) => {
+        let target = e.target;
+        shadowY = target.value;
+        drawScreen();
+      }
+      let shadowBlurChanged = (e) => {
+        let target = e.target;
+        shadowBlur = target.value;
+        drawScreen();
+      }
+      let shadowColorChanged = (e) => {
+        let target = e.target;
+        shadowColor = target.value;
+        drawScreen();
+      }
+      let textFillColor2Changed = (e) => {
+        var target = e.target;
+        textFillColor2 = target.value;
+        drawScreen();
+      }
+      let fillTypeChanged = (e) => {
+        var target = e.target;
+        fillType = target.value;
+        drawScreen();
+      }
+      let canvasWidthChanged = (e) => {
+        var target = e.target;
+        theCanvas.width = target.value;
+        drawScreen();
+      }
+      let canvasHeightChanged = (e) => {
+        var target = e.target;
+        theCanvas.height = target.value;
+        drawScreen();
+      }
+      let canvasStyleSizeChanged = (e) => {
+        let styleWidth = document.getElementById("canvasStyleWidth");
+        let styleHeight = document.getElementById("canvasStyleHeight");
+        let styleVlue = "width:" + styleWidth.value + "px; height:" + styleHeight.value + "px;";
+        theCanvas.setAttribute("style", styleVlue);
+        drawScreen();
+      }
+      let createImageDataPressed = (e) => {
+        let imageDataDisplay = document.getElementById('imageDataDisplay');
+        imageDataDisplay.value = theCanvas.toDataURL();
+        window.open(imageDataDisplay.value, "canvasImage", "left=0,top=0,width=" + ",toolbar=0,resizable=0");
+      }
       drawScreen();
 
       let formElement = document.getElementById("textBox");
@@ -205,6 +335,44 @@
 
       formElement = document.getElementById("textAlign");
       formElement.addEventListener('change', textAlignChanged, false);
+
+      formElement = document.getElementById("textAlpha");
+      formElement.addEventListener('change', textAlphaChanged, false);
+
+      formElement = document.getElementById("shadowX");
+      formElement.addEventListener('change', shadowXChanged, false);
+
+      formElement = document.getElementById("shadowY");
+      formElement.addEventListener('change', shadowYChanged, false);
+
+      formElement = document.getElementById("shadowBlur");
+      formElement.addEventListener('change', shadowBlurChanged, false);
+
+      formElement = document.getElementById("shadowColor");
+      formElement.addEventListener('change', shadowColorChanged, false);
+
+      formElement = document.getElementById("textFillColor2");
+      formElement.addEventListener("change", textFillColor2Changed, false);
+
+      formElement = document.getElementById("fillType");
+      formElement.addEventListener("change", fillTypeChanged, false);
+
+      formElement = document.getElementById("canvasWidth");
+      formElement.addEventListener("change", canvasWidthChanged, false);
+
+      formElement = document.getElementById("canvasHeight");
+      formElement.addEventListener("change", canvasHeightChanged, false);
+
+      formElement = document.getElementById("canvasStyleWidth");
+      formElement.addEventListener("change", canvasStyleSizeChanged, false);
+
+      formElement = document.getElementById("canvasStyleHeight");
+      formElement.addEventListener("change", canvasStyleSizeChanged, false);
+
+      formElement = document.getElementById("createImageData");
+      formElement.addEventListener("click", createImageDataPressed, false);
+
+      pattern.src = "texture.jpg";
     }
   </script>
 </body>
