@@ -24,18 +24,29 @@
     let canvasApp = () => {
       let theCanvas = document.getElementById("canvasOne")
       let context = theCanvas.getContext("2d");
+
+      let counter = 0;
+      const tileSheet = new Image();
+      tileSheet.src = "ships.png";
+
       let drawScreen = () => {
-        context.drawImage(spaceShip, 0, 0);
-        context.drawImage(spaceShip, 0, 34, 32, 32);
-        context.drawImage(spaceShip, 0, 68, 64, 64);
-        context.drawImage(spaceShip, 0, 140, 16, 16);
+        context.fillStyle = "#aaaaaa";
+        context.fillRect(0, 0, 500, 500);
+        context.drawImage(tileSheet, 32 * counter, 0, 32, 32, 50, 50, 64, 64);
+        counter++;
+        if (counter > 1) {
+          counter = 0;
+        }
       }
-      const spaceShip = new Image();
-      spaceShip.src = "ship1.png";
+
+      let startUp = () => {
+        setInterval(drawScreen, 100);
+      }
+
       let eventShipLoaded = () => {
-        drawScreen();
+        startUp();
       }
-      spaceShip.addEventListener('load', eventShipLoaded, false);
+      tileSheet.addEventListener('load', eventShipLoaded, false);
     }
   </script>
 </body>
