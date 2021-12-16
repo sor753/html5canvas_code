@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+
+      let animationFrames = [1, 2, 3, 4, 5, 6, 7, 8];
+      let frameIndex = 0;
+      let rotation = 90;
+      let x = 50;
+      let y = 50;
+      let dx = 1;
+      let dy = 0;
+
+      const tileSheet = new Image();
+      tileSheet.src = "tanks_sheet.png";
+
+      let drawScreen = () => {
+        x = x + dx;
+        y = y + dy;
+
+        context.fillStyle = "#aaaaaa";
+        context.fillRect(0, 0, 500, 500);
+
+        context.save();
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        let angleInRadians = rotation * Math.PI / 180;
+        context.translate(x + 16, y + 16);
+        context.rotate(angleInRadians);
+        let sourceX = (animationFrames[frameIndex] % 8) * 32;
+        let sourceY = Math.floor(animationFrames[frameIndex] / 8) * 32;
+
+        context.drawImage(tileSheet, sourceX, sourceY, 32, 32, -16, -16, 32, 32);
+        context.restore();
+        frameIndex++;
+        if (frameIndex == animationFrames.length) {
+          frameIndex = 0;
+        }
+      }
+
+      let startUp = () => {
+        setInterval(drawScreen, 100);
+      }
+
+      let eventShipLoaded = () => {
+        startUp();
+      }
+      tileSheet.addEventListener('load', eventShipLoaded, false);
+    }
+  </script>
+</body>
+
+</html>

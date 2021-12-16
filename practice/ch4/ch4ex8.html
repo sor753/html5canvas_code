@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+
+      const tileSheet = new Image();
+      tileSheet.src = "tanks_sheet.png";
+
+      let mapIndexOffset = -1;
+      let mapRows = 10;
+      let mapCols = 10;
+
+      let tileMap = [
+        [32, 31, 31, 31, 1, 31, 31, 31, 31, 32],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [32, 1, 26, 1, 26, 1, 26, 1, 1, 32],
+        [32, 26, 1, 1, 26, 1, 1, 26, 1, 32],
+        [32, 1, 1, 1, 26, 26, 1, 26, 1, 32],
+        [32, 1, 1, 26, 1, 1, 1, 26, 1, 32],
+        [32, 1, 1, 1, 1, 1, 1, 26, 1, 32],
+        [1, 1, 26, 1, 26, 1, 26, 1, 1, 1],
+        [32, 1, 1, 1, 1, 1, 1, 1, 1, 32],
+        [32, 31, 31, 31, 1, 31, 31, 31, 31, 32]
+      ]
+
+      let drawScreen = () => {
+        let rowCtr = 0;
+        let colCtr = 0;
+        tileMap.forEach(row => {
+          row.forEach(col => {
+            let tileId = tileMap[rowCtr][colCtr] + mapIndexOffset;
+            let sourceX = (tileId % 8) * 32;
+            let sourceY = Math.floor(tileId / 8) * 32;
+
+            context.drawImage(tileSheet, sourceX, sourceY, 32, 32, colCtr * 32, rowCtr * 32, 32, 32);
+
+            colCtr++;
+            console.log(colCtr, rowCtr);
+          });
+          rowCtr++;
+          colCtr = 0;
+          console.log(colCtr, rowCtr);
+        });
+        // for (let rowCtr = 0; rowCtr < mapRows; rowCtr++) {
+        //   for (let colCtr = 0; colCtr < mapCols; colCtr++) {
+        //     let tileId = tileMap[rowCtr][colCtr] + mapIndexOffset;
+        //     let sourceX = (tileId % 8) * 32;
+        //     let sourceY = Math.floor(tileId / 8) * 32;
+
+        //     context.drawImage(tileSheet, sourceX, sourceY, 32, 32, colCtr * 32, rowCtr * 32, 32, 32);
+
+        //     console.log(colCtr, rowCtr);
+        //   }
+        // }
+      }
+
+      let eventShipLoaded = () => {
+        drawScreen();
+      }
+      tileSheet.addEventListener('load', eventShipLoaded, false);
+    }
+  </script>
+</body>
+
+</html>

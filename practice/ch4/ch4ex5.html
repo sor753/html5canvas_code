@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="300">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+
+      let animationFrames = [1, 2, 3, 4, 5, 6, 7, 8];
+      let frameIndex = 0;
+      let dx = 0;
+      let dy = -1;
+      let x = 50;
+      let y = 50;
+
+      const tileSheet = new Image();
+      tileSheet.src = "tanks_sheet.png";
+
+      let drawScreen = () => {
+        y = y + dy;
+        x = x + dx;
+
+        context.fillStyle = "#aaaaaa";
+        context.fillRect(0, 0, 500, 500);
+
+        let sourceX = (animationFrames[frameIndex] % 8) * 32;
+        let sourceY = Math.floor(animationFrames[frameIndex] / 8) * 32;
+
+        context.drawImage(tileSheet, sourceX, sourceY, 32, 32, x, y, 32, 32);
+
+        frameIndex++;
+        if (frameIndex == animationFrames.length) {
+          frameIndex = 0;
+        }
+      }
+
+      let startUp = () => {
+        setInterval(drawScreen, 100);
+      }
+
+      let eventShipLoaded = () => {
+        startUp();
+      }
+      tileSheet.addEventListener('load', eventShipLoaded, false);
+    }
+  </script>
+</body>
+
+</html>
