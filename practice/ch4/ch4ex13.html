@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="500">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+
+      let photo = new Image();
+      photo.src = "butterfly.jpg";
+
+      let currentScale = .5;
+      let minScale = .2;
+      let maxScale = 3;
+      let scaleIncrement = .1;
+
+      let windowWidth = 500;
+      let windowHeight = 500;
+      let windowX = 0;
+      let windowY = 0;
+
+      let drawScreen = () => {
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, 500, 500);
+
+        context.drawImage(photo, windowX, windowY, windowWidth, windowHeight, 0, 0, windowWidth * currentScale, windowHeight * currentScale);
+      }
+
+      let startUp = () => {
+        setInterval(drawScreen, 100);
+      }
+
+      let eventPhotoLoaded = () => {
+        startUp();
+      }
+      photo.addEventListener('load', eventPhotoLoaded, false);
+
+      document.addEventListener('keydown', (e) => {
+        e = e ? e : window.event;
+        console.log(e.keyCode + "down");
+
+        switch (e.keyCode) {
+          case 38:
+            windowY -= 10;
+            if (windowY < 0) {
+              windowY = 0;
+            }
+            break;
+          case 40:
+            windowY += 10;
+            if (windowY > photo.height - windowHeight) {
+              windowY = photo.height - windowHeight;
+            }
+            break;
+          case 37:
+            windowX -= 10;
+            if (windowX < 0) {
+              windowX = 0;
+            }
+            break;
+          case 39:
+            windowX += 10;
+            if (windowX > photo.width - windowWidth) {
+              windowY = photo.width - windowWidth;
+            }
+            break;
+          case 109:
+            currentScale -= currentScale;
+            if (currentScale < minScale) {
+              currentScale = minScale;
+            }
+            break;
+          case 107:
+            currentScale += currentScale;
+            if (currentScale > maxScale) {
+              currentScale = maxScale;
+            }
+            break;
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>
