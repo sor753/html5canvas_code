@@ -13,10 +13,6 @@
     <canvas id="canvasOne" width="500" height="500">
       Your Browser does not support HTML5 Canvas.
     </canvas>
-    <form>
-      Canvas Width: <input type="range" id="canvasWidth" min="0" max="1000" step="1" value="500">
-      Canvas Hight: <input type="range" id="canvasHeight" min="0" max="1000" step="1" value="500">
-    </form>
   </div>
   <script>
     window.addEventListener('load', () => {
@@ -31,7 +27,7 @@
 
       let update = () => {
         for (let i = 0; i < balls.length; i++) {
-          ball = ball[i];
+          ball = balls[i];
           ball.nextx = (ball.x + ball.velocityx);
           ball.nexty = (ball.y + ball.velocityy);
         }
@@ -41,7 +37,7 @@
         let ball;
 
         for (let i = 0; i < balls.length; i++) {
-          ball = ball[i];
+          ball = balls[i];
           if (ball.nextx + ball.radius > theCanvas.width) {
             ball.velocityx = ball.velocityx * -1;
             ball.nextx = theCanvas.width - ball.radius;
@@ -86,18 +82,22 @@
       let collideBalls = (ball1, ball2) => {
         let dx = ball1.nextx - ball2.nextx;
         let dy = ball1.nexty - ball2.nexty;
+
         let collisionAngle = Math.atan2(dy, dx);
+
         let speed1 = Math.sqrt(ball1.velocityx * ball1.velocityx + ball1.velocityy * ball1.velocityy);
         let speed2 = Math.sqrt(ball2.velocityx * ball2.velocityx + ball2.velocityy * ball2.velocityy);
+
         let direction1 = Math.atan2(ball1.velocityy, ball1.velocityx);
         let direction2 = Math.atan2(ball2.velocityy, ball2.velocityx);
+
         let velocityx_1 = speed1 * Math.cos(direction1 - collisionAngle);
         let velocityy_1 = speed1 * Math.sin(direction1 - collisionAngle);
         let velocityx_2 = speed2 * Math.cos(direction2 - collisionAngle);
-        let velocityy_2 = speed2 * Math.cos(direction2 - collisionAngle);
+        let velocityy_2 = speed2 * Math.sin(direction2 - collisionAngle);
 
-        let final_velocityx_1 = ((ball1.mass - ball2.mass) * velocityx_1 + (ball2.mass + ball2.mass) * velocity_2) / (ball1.mass + ball2.mass);
-        let final_velocityx_2 = ((ball1.mass + ball2.mass) * velocityx_1 + (ball2.mass - ball2.mass) * velocity_2) / (ball1.mass + ball2.mass);
+        let final_velocityx_1 = ((ball1.mass - ball2.mass) * velocityx_1 + (ball2.mass + ball2.mass) * velocityx_2) / (ball1.mass + ball2.mass);
+        let final_velocityx_2 = ((ball1.mass + ball1.mass) * velocityx_1 + (ball2.mass - ball1.mass) * velocityx_2) / (ball1.mass + ball2.mass);
 
         let final_velocityy_1 = velocityy_1;
         let final_velocityy_2 = velocityy_2;
@@ -128,7 +128,6 @@
       }
 
       let drawScreen = () => {
-        console.log("draw");
         context.fillStyle = "#EEEEEE";
         context.fillRect(0, 0, theCanvas.width, theCanvas.height);
 
@@ -141,7 +140,7 @@
         render();
       }
 
-      let numBalls = 10;
+      let numBalls = 200;
       let maxSize = 15;
       let minSize = 5;
       let maxSpeed = maxSize + 5;
@@ -151,11 +150,11 @@
       let canStartHere = (ball) => {
         let retval = true;
         for (let i = 0; i < balls.length; i++) {
-          if (hitTestCircle(ball, balls[1])) {
+          if (hitTestCircle(ball, balls[i])) {
             retval = false;
           }
-          return retval;
         }
+        return retval;
       }
 
       for (let i = 0; i < numBalls; i++) {
@@ -170,32 +169,13 @@
           tempvelocityx = Math.cos(tempRadians) * tempSpeed;
           tempvelocityy = Math.sin(tempRadians) * tempSpeed;
 
-          tempBall = { x: tempX, y: tempY, nextX: tempX, nextY: tempY, radius: tempRadius, speed: tempSpeed, angle: tempAngle, velocityx: tempvelocityx, velocityy: tempvelocityy };
+          tempBall = { x: tempX, y: tempY, nextX: tempX, nextY: tempY, radius: tempRadius, speed: tempSpeed, angle: tempAngle, velocityx: tempvelocityx, velocityy: tempvelocityy, mass: tempRadius };
           placeOK = canStartHere(tempBall);
         }
         balls.push(tempBall);
       }
 
-      let canvasWidthChanged = (e) => {
-        let target = e.target;
-        theCanvas.width = target.value;
-        drawScreen();
-      }
-      let canvasHeightChanged = (e) => {
-        let target = e.target;
-        theCanvas.height = target.value;
-        drawScreen();
-      }
-
-      let formElement;
-      formElement = document.getElementById("canvasWidth");
-      formElement.addEventListener("change", canvasWidthChanged, false);
-
-      formElement = document.getElementById("canvasHeight");
-      formElement.addEventListener("change", canvasHeightChanged, false);
-
       setInterval(drawScreen, 33);
-      // drawScreen();
     }
   </script>
 </body>
