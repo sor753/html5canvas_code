@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="500">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    })
+    let eventWindowLoaded = () => {
+      canvasApp();
+    };
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+
+      let pointImage = new Image();
+      pointImage.src = "point.png";
+
+      let drawScreen = () => {
+        context.fillStyle = "#EEEEEE";
+        context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+
+        context.strokeStyle = "#000000";
+        context.strokeRect(1, 1, theCanvas.width - 2, theCanvas.height - 2);
+
+        ball.x = circle.centerX + Math.cos(circle.angle) * circle.radius;
+        ball.y = circle.centerY + Math.sin(circle.angle) * circle.radius;
+        circle.angle += ball.speed;
+        circle.radius += radiusInc;
+
+        points.push({ x: ball.x, y: ball.y });
+
+        for (let i = 0; i < points.length; i++) {
+          context.drawImage(pointImage, points[i].x, points[i].y, 1, 1);
+        }
+
+        context.fillStyle = "#000000";
+        context.beginPath();
+        context.arc(ball.x, ball.y, 15, 0, Math.PI * 2, true);
+        context.fill();
+      }
+
+      let radiusInc = .2;
+      let circle = { centerX: 250, centerY: 250, radius: 2, angle: 0 };
+      let ball = { x: 0, y: 0, speed: .05 };
+      let points = new Array();
+
+      setInterval(drawScreen, 100);
+    }
+  </script>
+</body>
+
+</html>

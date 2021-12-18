@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="position: absolute;top: 50px;left: 50px;">
+    <canvas id="canvasOne" width="500" height="500">
+      Your Browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      eventWindowLoaded();
+    });
+
+    let bullseye;
+    let eventWindowLoaded = () => {
+      bullseye = new Image();
+      bullseye.onload = eventAssetsLoaded;
+      bullseye.src = "bullseye.png"
+    };
+    let eventAssetsLoaded = () => {
+      canvasApp();
+    }
+    let canvasApp = () => {
+      let theCanvas = document.getElementById("canvasOne")
+      let context = theCanvas.getContext("2d");
+
+      let pointImage = new Image();
+      pointImage.src = "point.png";
+
+      let drawScreen = () => {
+        context.fillStyle = "#EEEEEE";
+        context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+
+        context.strokeStyle = "#000000";
+        context.strokeRect(1, 1, theCanvas.width - 2, theCanvas.height - 2);
+
+        let t = player.t;
+
+        let cx = 3 * (p1.x - p0.x);
+        let bx = 3 * (p2.x - p1.x) - cx;
+        let ax = p3.x - p0.x - cx - bx;
+
+        let cy = 3 * (p1.y - p0.y);
+        let by = 3 * (p2.y - p1.y) - cy;
+        let ay = p3.y - p0.y - cy - by;
+
+        let xt = ax * (t * t * t) + bx * (t * t) + cx * t + p0.x;
+        let yt = ay * (t * t * t) + by * (t * t) + cy * t + p0.y;
+
+        player.t += player.speed;
+
+        if (player.t > 1) {
+          player.t = 1;
+        }
+
+        context.font = "10px sans";
+        context.fillStyle = "#FF0000";
+        context.beginPath();
+        context.arc(p0.x, p0.y, 8, 0, Math.PI * 2, true);
+        context.fill();
+        context.fillStyle = "#FFFFFF";
+        context.fillText("0", p0.x - 2, p0.y + 2);
+
+        context.fillStyle = "#FF0000";
+        context.beginPath();
+        context.arc(p1.x, p1.y, 8, 0, Math.PI * 2, true);
+        context.fill();
+        context.fillStyle = "#FFFFFF";
+        context.fillText("1", p1.x - 2, p1.y + 2);
+
+        context.fillStyle = "#FF0000";
+        context.beginPath();
+        context.arc(p2.x, p2.y, 8, 0, Math.PI * 2, true);
+        context.fill();
+        context.fillStyle = "#FFFFFF";
+        context.fillText("2", p2.x - 2, p2.y + 2);
+
+        context.fillStyle = "#FF0000";
+        context.beginPath();
+        context.arc(p3.x, p3.y, 8, 0, Math.PI * 2, true);
+        context.fill();
+        context.fillStyle = "#FFFFFF";
+        context.fillText("3", p3.x - 2, p3.y + 2);
+
+        points.push({ x: xt, y: yt });
+
+        for (let i = 0; i < points.length; i++) {
+          context.drawImage(pointImage, points[i].x, points[i].y, 1, 1);
+        }
+
+        player.x = xt - bullseye.width / 2;
+        player.y = yt - bullseye.height / 2;
+
+        context.drawImage(bullseye, player.x, player.y);
+      }
+
+      let p0 = { x: 150, y: 440 };
+      let p1 = { x: 450, y: 10 };
+      let p2 = { x: 50, y: 10 };
+      let p3 = { x: 325, y: 450 };
+      let player = { x: 0, y: 0, speed: .01, t: 0 };
+      let points = new Array();
+
+      setInterval(drawScreen, 33);
+    }
+  </script>
+</body>
+
+</html>
